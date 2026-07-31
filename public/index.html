@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DragonflAI QA — Toolkit personal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<header>
+  <div class="brand">DragonflAI<span>QA</span> <small>toolkit personal</small></div>
+  <div class="badge-local">● uso local — solo tú</div>
+</header>
+
+<main class="wrap">
+
+  <section class="agent-card">
+    <div class="agent-head">
+      <span class="agent-tag">/agente-01</span>
+      <h2>Generador de Playwright</h2>
+      <p>Describe un flujo y recibe un script de Playwright listo para revisar y correr.</p>
+    </div>
+    <form id="form-playwright">
+      <label>Descripción del flujo a probar</label>
+      <input type="text" name="description" placeholder="ej. login con email inválido" required>
+      <label>URL de la app (opcional)</label>
+      <input type="text" name="url" placeholder="https://tuapp.com/login">
+      <button type="submit">Generar script →</button>
+    </form>
+    <div class="output" id="out-playwright"></div>
+  </section>
+
+  <section class="agent-card">
+    <div class="agent-head">
+      <span class="agent-tag">/agente-02</span>
+      <h2>Casos de prueba de API</h2>
+      <p>Pega un endpoint, fragmento de OpenAPI o colección de Postman.</p>
+    </div>
+    <form id="form-api">
+      <label>Especificación del endpoint / API</label>
+      <textarea name="spec" rows="6" placeholder="POST /api/login&#10;body: { email, password }&#10;respuestas: 200, 401, 400" required></textarea>
+      <label>Formato de salida</label>
+      <select name="format">
+        <option value="texto">Lista de casos (texto)</option>
+        <option value="postman">Colección de Postman (JSON)</option>
+        <option value="playwright">Script de Playwright API</option>
+      </select>
+      <button type="submit">Generar casos →</button>
+    </form>
+    <div class="output" id="out-api"></div>
+  </section>
+
+  <section class="agent-card">
+    <div class="agent-head">
+      <span class="agent-tag">/agente-03</span>
+      <h2>Escaneo de accesibilidad</h2>
+      <p>Corre axe-core real sobre una URL viva y resume los hallazgos en español.</p>
+    </div>
+    <form id="form-a11y">
+      <label>URL a revisar</label>
+      <input type="text" name="url" placeholder="https://tuapp.com" required>
+      <button type="submit">Escanear →</button>
+    </form>
+    <div class="output" id="out-a11y"></div>
+  </section>
+
+  <section class="agent-card">
+    <div class="agent-head">
+      <span class="agent-tag">/agente-04</span>
+      <h2>Revisión de UX/UI</h2>
+      <p>Sube una captura de pantalla y recibe retroalimentación específica.</p>
+    </div>
+    <form id="form-ux">
+      <label>Captura de pantalla</label>
+      <input type="file" name="screenshot" accept="image/*" required>
+      <label>Contexto (opcional)</label>
+      <input type="text" name="context" placeholder="ej. pantalla de checkout">
+      <button type="submit">Analizar →</button>
+    </form>
+    <div class="output" id="out-ux"></div>
+  </section>
+  <section class="agent-card">
+    <div class="agent-head">
+      <span class="agent-tag">/agente-05</span>
+      <h2>Casos de prueba funcionales</h2>
+      <p>Pega una historia de usuario o requerimiento y recibe el plan de casos completo.</p>
+    </div>
+    <form id="form-testcases">
+      <label>Historia de usuario / requerimiento</label>
+      <textarea name="requirement" rows="4" placeholder="ej. Como usuario quiero recuperar mi contraseña ingresando mi email" required></textarea>
+      <button type="submit">Generar casos →</button>
+    </form>
+    <div class="output" id="out-testcases"></div>
+  </section>
+
+  <section class="agent-card">
+    <div class="agent-head">
+      <span class="agent-tag">/agente-06</span>
+      <h2>Reporte de bugs</h2>
+      <p>Describe lo que viste — recibe el ticket completo: síntoma, diagnóstico, causa raíz, fix y verificación.</p>
+    </div>
+    <form id="form-bugreport">
+      <label>Severidad</label>
+      <select name="severity">
+        <option>Crítico</option>
+        <option selected>Alto</option>
+        <option>Medio</option>
+        <option>Bajo</option>
+      </select>
+      <label>¿Qué observaste?</label>
+      <textarea name="description" rows="5" placeholder="ej. Al aplicar un cupón con caracteres especiales en checkout, la página se queda cargando y no muestra error" required></textarea>
+      <button type="submit">Generar reporte →</button>
+    </form>
+    <div class="output" id="out-bugreport"></div>
+  </section>
+
+  <section class="agent-card" id="report-builder">
+    <div class="agent-head">
+      <span class="agent-tag">/reporte</span>
+      <h2>Generar QA Audit Express (Word)</h2>
+      <p>Junta los hallazgos que vayas marcando en los agentes de arriba y arma el reporte final.</p>
+    </div>
+    <div id="findings-list" class="findings-list"></div>
+    <form id="form-report">
+      <label>Cliente</label>
+      <input type="text" name="cliente" placeholder="Nombre del cliente o empresa" required>
+      <label>Producto auditado</label>
+      <input type="text" name="producto" placeholder="Nombre de la app / sitio">
+      <label>Alcance</label>
+      <input type="text" name="alcance" placeholder="ej. Flujo de registro, checkout y panel de usuario">
+      <label>Quick wins (uno por línea)</label>
+      <textarea name="quickWins" rows="3" placeholder="Validar input de cupón&#10;Agregar mensaje de error visible"></textarea>
+      <label>Recomendación de siguiente paso (opcional)</label>
+      <textarea name="nextSteps" rows="3" placeholder="Se deja el párrafo por default si no escribes nada"></textarea>
+      <button type="submit">Generar reporte Word →</button>
+    </form>
+    <div class="output" id="out-report"></div>
+  </section>
+
+</main>
+
+<footer>DragonflAI QA Toolkit · corre en tu máquina · tu API key nunca sale de tu .env</footer>
+
+<script src="/app.js"></script>
+</body>
+</html>
